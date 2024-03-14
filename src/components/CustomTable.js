@@ -11,7 +11,8 @@ export default function CustomTable({ columns, data }) {
     React.useState(false);
   const filteredItems = data?.filter(
     (item) =>
-      item.name.common && item.name.common.toLowerCase().includes(filterText.toLowerCase())
+      item.name.common &&
+      item.name.common.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const subHeaderComponentMemo = React.useMemo(() => {
@@ -31,41 +32,38 @@ export default function CustomTable({ columns, data }) {
     );
   }, [filterText, resetPaginationToggle]);
 
-  createTheme({
-    background: {
-      default: "transparent",
+  createTheme(
+    "solarized",
+    {
+      background: {
+        default: "transparent",
+      },
+      context: {
+        background: "transparent",
+      },
+      divider: {
+        default: "#3e3f40",
+      },
+      sortFocus: {
+        default: "#2aa198",
+      },
     },
-    context: {
-      background: "transparent",
-    },
-    divider: {
-      default: "#3e3f40",
-    },
-    sortFocus: {
-      default: "#3e3f40",
-    },
-  });
+    "dark"
+  );
 
   const customStyles = {
     rows: {
       style: {
-        minHeight: "72px",
         fontSize: "14px",
       },
     },
     headCells: {
       style: {
         minHeight: "72px",
-        fontSize: "14px",
+        fontSize: "15px",
         fontWeight: "bold",
       },
     },
-    cells: {
-      style: {
-        minHeight: "72px",
-        fontSize: "14px",
-      },
-    }
   };
 
   return (
@@ -75,11 +73,11 @@ export default function CustomTable({ columns, data }) {
       pagination
       fixedHeader={true}
       theme={theme}
-      noHeader={true}
       customStyles={customStyles}
-      paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-      subHeader
-      subHeaderComponent={subHeaderComponentMemo}
+      noHeader={true}
+      paginationResetDefaultPage={resetPaginationToggle}
+      // subHeader
+      // subHeaderComponent={subHeaderComponentMemo}
       persistTableHead
     />
   );
