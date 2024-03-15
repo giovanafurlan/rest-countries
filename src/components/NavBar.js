@@ -5,7 +5,7 @@ import DarkLight from "./DarkLight";
 export default function NavBar({ children }) {
   return (
     <Box pos={"relative"} w="full">
-      {/* <DarkLight /> */}
+      <DarkLight />
       {children}
     </Box>
   );

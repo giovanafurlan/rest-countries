@@ -278,6 +278,7 @@ function App() {
       const filtered = restCountries?.filter((item) =>
         item.name?.common?.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      console.log("filtered", filtered);
       setFilteredData(filtered);
     }
   };
@@ -292,7 +293,7 @@ function App() {
       <Container maxW="container.lg" py={12}>
         <SearchBar onSearchTable={handleSearchMap} />
         <CustomTable data={filteredData} columns={columns} />
-        <Map />
+        <Map latlng={filteredData[0]?.latlng} />
       </Container>
     </NavBar>
   );
