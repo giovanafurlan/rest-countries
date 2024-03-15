@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import '@fontsource/courgette';
+import '@fontsource/pompiere';
 
 const config = {
   initialColorMode: "light",
@@ -13,7 +13,7 @@ const config = {
 const theme = extendTheme({
   config,
   fonts: {
-    heading: `'Courgette', cursive`,
+    heading: `'Pompiere', system-ui`,
     body: `'Arial', sans-serif`,
   },
   breakpoints: {

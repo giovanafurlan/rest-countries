@@ -4,13 +4,18 @@ import "./index.css";
 import Main from "./components/Main";
 import NavBar from "./components/NavBar";
 import CustomTable from "./components/CustomTable";
-import { Container } from "@chakra-ui/react";
+import { Box, Container, useToast } from "@chakra-ui/react";
 import SearchBar from "./components/SearchBar";
 import Map from "./components/Map";
 
 function App() {
   const [restCountries, setRestCountries] = useState();
   const [filteredData, setFilteredData] = useState();
+  const [optionType, setOptionType] = useState();
+  const [displayTable, setDisplayTable] = useState("none");
+  const [displayMap, setDisplayMap] = useState("hidden");
+
+  const toast = useToast();
 
   async function request() {
     await getRestCountries()
@@ -271,29 +276,50 @@ function App() {
     },
   };
 
-  const handleSearchMap = (searchTerm) => {
+  const handleSearch = (searchTerm) => {
     if (searchTerm.trim() === "") {
       setFilteredData(restCountries);
     } else {
       const filtered = restCountries?.filter((item) =>
         item.name?.common?.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      if (optionType?.includes("tabela")) {
+        setDisplayTable("block");
+      } else if (optionType?.includes("mapa")) {
+        setDisplayMap("visible");
+      } else if (
+        optionType?.includes("mapa") &&
+        optionType?.includes("tabela")
+      ) {
+        setDisplayTable("block");
+        setDisplayMap("visible");
+      } else {
+        toast({
+          title: "Selecione um tipo de exibição",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
       console.log("filtered", filtered);
       setFilteredData(filtered);
     }
   };
 
-  async function onBuscarNoMapa() {
-    // Lógica para buscar no mapa aqui...
-  }
-
   return (
     <NavBar>
       <Main />
       <Container maxW="container.lg" py={12}>
-        <SearchBar onSearchTable={handleSearchMap} />
-        <CustomTable data={filteredData} columns={columns} />
-        <Map latlng={filteredData[0]?.latlng} />
+        <SearchBar
+          onSearch={handleSearch}
+          optionType={(e) => setOptionType(e)}
+        />
+        <Box display={displayTable}>
+          <CustomTable data={filteredData} columns={columns} />
+        </Box>
+        <Box visibility={displayMap}>
+          <Map latlng={filteredData ? filteredData[0]?.latlng : null} />
+        </Box>
       </Container>
     </NavBar>
   );

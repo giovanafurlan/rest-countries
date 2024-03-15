@@ -1,12 +1,19 @@
 import { useState } from "react";
-import { Button, Flex, Input } from "@chakra-ui/react";
-import { GrTableAdd, GrMapLocation } from "react-icons/gr";
+import {
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  Flex,
+  Input,
+  Select,
+} from "@chakra-ui/react";
+import { GrSearch } from "react-icons/gr";
 
-export default function SearchBar({ onSearchTable, onSearchMap }) {
+export default function SearchBar({ onSearch, optionType }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = () => {
-    onSearchTable(searchTerm);
+    onSearch(searchTerm);
   };
 
   return (
@@ -17,53 +24,21 @@ export default function SearchBar({ onSearchTable, onSearchMap }) {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+      <CheckboxGroup onChange={optionType}>
+        <Checkbox value={"tabela"} colorScheme="purple">Tabela</Checkbox>
+        <Checkbox value={"mapa"} colorScheme="purple">Mapa</Checkbox>
+      </CheckboxGroup>
       <Button
         type="submit"
-        leftIcon={<GrTableAdd />}
+        leftIcon={<GrSearch />}
         color="white"
         bg="lightBG"
         _hover={{ bg: "darkBG" }}
         fontWeight="normal"
         onClick={handleSearch}
       >
-        Tabela
-      </Button>
-      <Button
-        onClick={onSearchMap}
-        leftIcon={<GrMapLocation />}
-        color="white"
-        bg="lightBG"
-        _hover={{ bg: "darkBG" }}
-        fontWeight="normal"
-      >
-        Mapa
+        Buscar país
       </Button>
     </Flex>
   );
 }
-
-const Search = ({ onSearch, onClear }) => {
-    const [searchTerm, setSearchTerm] = useState('');
-  
-    const handleSearch = () => {
-      onSearch(searchTerm);
-    };
-  
-    const handleClear = () => {
-      setSearchTerm('');
-      onClear();
-    };
-  
-    return (
-      <div>
-        <input
-          type="text"
-          placeholder="Digite o nome..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Pesquisar</button>
-        <button onClick={handleClear}>Limpar</button>
-      </div>
-    );
-  };
