@@ -1,36 +1,20 @@
-import { useColorModeValue } from "@chakra-ui/react";
+import { CircularProgress, useColorModeValue } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import DataTable, { createTheme } from "react-data-table-component";
-import Filter from "./Filter";
-import React from "react";
 
 export default function CustomTable({ columns, data }) {
-  const theme = useColorModeValue("", "");
+  const theme = useColorModeValue("", "solarized");
 
-  const [filterText, setFilterText] = React.useState("");
-  const [resetPaginationToggle, setResetPaginationToggle] =
-    React.useState(false);
-  const filteredItems = data?.filter(
-    (item) =>
-      item.name.common &&
-      item.name.common.toLowerCase().includes(filterText.toLowerCase())
-  );
+  const [pending, setPending] = useState(true);
+  const [rows, setRows] = useState([]);
 
-  const subHeaderComponentMemo = React.useMemo(() => {
-    const handleClear = () => {
-      if (filterText) {
-        setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText("");
-      }
-    };
-
-    return (
-      <Filter
-        onFilter={(e) => setFilterText(e.target.value)}
-        onClear={handleClear}
-        filterText={filterText}
-      />
-    );
-  }, [filterText, resetPaginationToggle]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setRows(data);
+      setPending(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   createTheme(
     "solarized",
@@ -69,16 +53,12 @@ export default function CustomTable({ columns, data }) {
   return (
     <DataTable
       columns={columns}
-      data={filteredItems}
+      data={data}
       pagination
-      fixedHeader={true}
       theme={theme}
       customStyles={customStyles}
-      noHeader={true}
-      paginationResetDefaultPage={resetPaginationToggle}
-      // subHeader
-      // subHeaderComponent={subHeaderComponentMemo}
-      persistTableHead
+      progressPending={pending}
+      progressComponent={<CircularProgress isIndeterminate={true} color="purple.300" />}
     />
   );
 }

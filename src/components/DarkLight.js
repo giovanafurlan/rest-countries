@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, useColorMode } from "@chakra-ui/react";
+import { Button, useColorMode } from "@chakra-ui/react";
 import { FaSun, FaMoon } from "react-icons/fa";
 
 export default function DarkLight() {

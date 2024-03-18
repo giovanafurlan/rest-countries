@@ -4,8 +4,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Flex,
-  Input,
-  Select,
+  Input
 } from "@chakra-ui/react";
 import { GrSearch } from "react-icons/gr";
 
@@ -16,8 +15,10 @@ export default function SearchBar({ onSearch, optionType }) {
     onSearch(searchTerm);
   };
 
+  console.log("handleSearch", handleSearch);
+
   return (
-    <Flex gap="2" mb={8}>
+    <Flex gap="1" mb={8}>
       <Input
         id="buscarNaTabela"
         placeholder="Digite o nome do país que deseja buscar"
