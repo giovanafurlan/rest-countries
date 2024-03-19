@@ -12,7 +12,7 @@ import Historic from "./components/Historic";
 function App() {
   const [restCountries, setRestCountries] = useState();
   const [filteredData, setFilteredData] = useState();
-  const [optionType, setOptionType] = useState();
+  const [popup, setPopup] = useState();
   const [searchTerm, setSearchTerm] = useState([]);
   const [displayTable, setDisplayTable] = useState("none");
   const [displayMap, setDisplayMap] = useState("hidden");
@@ -23,7 +23,6 @@ function App() {
     await getRestCountries()
       .then((response) => {
         setRestCountries(response);
-        // setFilteredData(response);
       })
       .catch((error) => {
         console.log(error);
@@ -39,7 +38,7 @@ function App() {
       name: "Bandeira",
       selector: (row) => row?.flag,
       sortable: false,
-      maxWidth: "200px",
+      maxwidth: "200px",
       center: true,
     },
     {
@@ -82,7 +81,7 @@ function App() {
       wrap: true,
     },
     {
-      name: "Região",
+      name: "Continente",
       selector: (row) => row?.region,
       sortable: true,
       wrap: true,
@@ -90,13 +89,11 @@ function App() {
   ];
 
   const searchAgain = (country, type) => {
-    console.log("country", country);
     setSearchTerm(country);
-    handleSearch(country);
-    setOptionType(type);
+    handleSearch(country, type);
   };
 
-  const handleSearch = (searchTerm) => {
+  const handleSearch = (searchTerm, optionType) => {
     const object = {
       type: optionType,
       country: searchTerm,
@@ -110,31 +107,28 @@ function App() {
       (item) => item.country === searchTerm
     );
 
-    console.log("optionType", optionType);
-
-    if (!isAlreadySearched && optionType) {
-      localStorage.setItem(
-        "searchTerms",
-        JSON.stringify([...storedSearchTerms, object])
-      ); // Adicionar a nova busca ao array existente
-    }
-
-    setSearchTerm((searchTerms) => [...searchTerms, object]); // Atualizar o estado de searchTerm com a nova busca
-    setOptionType(""); // Limpar o optionType
     if (searchTerm.trim() === "") {
       setFilteredData(restCountries);
     } else {
       const filtered = restCountries?.filter((item) =>
         item.name?.common?.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      if (filtered.length != 0) {
-        if (optionType?.includes("tabela")) {
+
+      if (filtered.length !== 0) {
+        if (!isAlreadySearched && optionType.length !== 0) {
+          localStorage.setItem(
+            "searchTerms",
+            JSON.stringify([...storedSearchTerms, object])
+          ); // Adicionar a nova busca ao array existente
+        }
+        setSearchTerm((searchTerms) => [...searchTerms, object]); // Atualizar o estado de searchTerm com a nova busca
+        if (optionType.includes("tabela")) {
           setDisplayTable("block");
-        } else if (optionType?.includes("mapa")) {
+        } else if (optionType.includes("mapa")) {
           setDisplayMap("visible");
         } else if (
-          optionType?.includes("mapa") &&
-          optionType?.includes("tabela")
+          optionType.includes("mapa") &&
+          optionType.includes("tabela")
         ) {
           setDisplayTable("block");
           setDisplayMap("visible");
@@ -148,6 +142,19 @@ function App() {
         }
         console.log("filtered", filtered);
         setFilteredData(filtered);
+
+        // Criar objeto para o setPopup
+        const popupObject = {
+          name: filtered[0]?.name?.common,
+          population: filtered[0]?.population,
+          language: Object.values(filtered[0]?.languages)[0],
+          currency: Object.values(filtered[0]?.currencies)[0]?.name,
+          capital: Array.isArray(filtered[0]?.capital)
+            ? filtered[0]?.capital[0]
+            : "",
+          region: filtered[0]?.region,
+        };
+        setPopup(popupObject);
       } else {
         toast({
           title: "País não encontrado",
@@ -164,15 +171,15 @@ function App() {
       <Main />
       <Container maxW="container.lg" py={12}>
         <Historic searchTerms={searchTerm} searchAgain={searchAgain} />
-        <SearchBar
-          onSearch={handleSearch}
-          optionType={(e) => setOptionType(e)}
-        />
+        <SearchBar onSearch={handleSearch} onChangeType={handleSearch} />
         <Box display={displayTable}>
           <CustomTable data={filteredData} columns={columns} />
         </Box>
         <Box visibility={displayMap}>
-          <Map latlng={filteredData ? filteredData[0]?.latlng : null} />
+          <Map
+            latlng={filteredData ? filteredData[0]?.latlng : null}
+            popup={popup}
+          />
         </Box>
       </Container>
     </NavBar>

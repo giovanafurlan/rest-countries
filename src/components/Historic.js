@@ -22,6 +22,11 @@ export default function Historic({ searchAgain }) {
       sortable: false,
     },
     {
+      name: "Tipo",
+      selector: (row) => (row ? row?.type : ""),
+      sortable: false,
+    },
+    {
       name: "Horário",
       selector: (row) => (row ? row?.time : ""),
       sortable: true,
@@ -37,7 +42,7 @@ export default function Historic({ searchAgain }) {
           <MdArrowOutward color={"#8da0eb"} />
         </Button>
       ),
-      button: true,
+      button: "true",
       sortable: false,
     },
   ];
@@ -45,7 +50,6 @@ export default function Historic({ searchAgain }) {
   useEffect(() => {
     const storedSearchTerms =
       JSON.parse(localStorage.getItem("searchTerms")) || [];
-    console.log("storedSearchTerms", storedSearchTerms);
     setSearchTerms(storedSearchTerms);
   }, []);
 
