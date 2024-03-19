@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import '@fontsource/pompiere';
 
 const config = {
   initialColorMode: "light",
@@ -12,7 +13,7 @@ const config = {
 const theme = extendTheme({
   config,
   fonts: {
-    heading: `'Arial', sans-serif`,
+    heading: `'Pompiere', system-ui`,
     body: `'Arial', sans-serif`,
   },
   breakpoints: {
@@ -23,9 +24,11 @@ const theme = extendTheme({
     "2xl": "1800px",
   },
   colors: {
+    light: "#99a9e8",
+    dark: "#23156c",
     yellow: "#ea9c2c",
     lightBG: "#8da0eb",
-    darkBG: "#5c60d5"
+    darkBG: "#2f316b"
   },
   background: {
   },
