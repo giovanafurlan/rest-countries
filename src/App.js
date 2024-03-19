@@ -39,7 +39,7 @@ function App() {
       selector: (row) => row?.flag,
       sortable: false,
       maxwidth: "200px",
-      center: true,
+      center: "true",
     },
     {
       name: "Nome",
@@ -123,15 +123,17 @@ function App() {
         }
         setSearchTerm((searchTerms) => [...searchTerms, object]); // Atualizar o estado de searchTerm com a nova busca
         if (optionType.includes("tabela")) {
+          setDisplayMap("hidden");
           setDisplayTable("block");
         } else if (optionType.includes("mapa")) {
           setDisplayMap("visible");
+          setDisplayTable("none");
         } else if (
           optionType.includes("mapa") &&
           optionType.includes("tabela")
         ) {
-          setDisplayTable("block");
           setDisplayMap("visible");
+          setDisplayTable("block");
         } else {
           toast({
             title: "Selecione um tipo de exibição",
@@ -140,7 +142,6 @@ function App() {
             isClosable: true,
           });
         }
-        console.log("filtered", filtered);
         setFilteredData(filtered);
 
         // Criar objeto para o setPopup
@@ -171,7 +172,7 @@ function App() {
       <Main />
       <Container maxW="container.lg" py={12}>
         <Historic searchTerms={searchTerm} searchAgain={searchAgain} />
-        <SearchBar onSearch={handleSearch} onChangeType={handleSearch} />
+        <SearchBar onSearch={handleSearch} />
         <Box display={displayTable}>
           <CustomTable data={filteredData} columns={columns} />
         </Box>

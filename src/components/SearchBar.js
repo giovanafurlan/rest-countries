@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Button, Checkbox, CheckboxGroup, Flex, Input } from "@chakra-ui/react";
 import { GrSearch } from "react-icons/gr";
 
-export default function SearchBar({ onSearch, onChangeType }) {
+export default function SearchBar({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [optionType, setOptionType] = useState([]);
 
   const handleSearch = () => {
     onSearch(searchTerm, optionType); // Passar tanto o termo de pesquisa quanto o tipo selecionado
+    setSearchTerm(""); // Limpar o termo de pesquisa após a busca
     setOptionType([]); // Limpar optionType após a busca
   };
 
